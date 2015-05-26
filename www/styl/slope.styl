@@ -1,0 +1,31 @@
+&
+  svg
+    position absolute
+    top 0px
+    left 0px
+    g.urad
+      &.color
+        opacity 0.05
+        path
+          stroke-width 1.2
+        text
+          opacity 0
+          font-variant small-caps
+      &.black
+        path
+          stroke-width 0.5
+          stroke #d
+        circle
+          fill #d
+      &.preselected
+        &.color
+          opacity 1
+        text
+          opacity 1
+        text.name
+          font-weight bold
+        text.count
+          font-size 14px
+  svg.voronoi
+    path
+      fill transparent

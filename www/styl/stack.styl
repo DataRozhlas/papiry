@@ -1,0 +1,57 @@
+&
+  ul
+    position relative
+    list-style-type none
+    margin 0px
+    padding 0px
+    li
+      width 100%
+      float left
+      position absolute
+      height 36px
+      .title
+        display block
+        width 360px
+        float left
+        text-align right
+        padding-right 30px
+        position relative
+        top 8px
+      .bar
+        float left
+        height 20px
+        position relative
+        top 8px
+        .item
+          float left
+          height 100%
+          &:nth-child(1)
+            background #ab0000
+          &:nth-child(2)
+            background #d5342d
+          &:nth-child(3)
+            background #003366
+          &:nth-child(4)
+            background #2268b0
+          &:nth-child(5)
+            background #42a1ff
+          &:nth-child(3)
+            background rgba(desaturate(#003366, 70%), 0.01)
+            border 1px solid rgba(#003366, 0.1)
+            border-left 0px
+          &:nth-child(4)
+            background rgba(desaturate(#2268b0, 70%), 0.01)
+            border 1px solid rgba(#2268b0, 0.1)
+            border-left 0px
+          &:nth-child(5)
+            background rgba(desaturate(#42a1ff, 70%), 0.01)
+            border 1px solid rgba(#42a1ff, 0.1)
+            border-left 0px
+        .count
+          position absolute
+          white-space nowrap
+          top 1px
+          margin-left 10px
+          font-size 12px
+          &.all
+            opacity 0.1

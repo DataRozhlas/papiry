@@ -1,5 +1,6 @@
 return if window.location.hash != \#slope
 container = d3.select ig.containers.base
+  ..classed \slope yes
 data = d3.tsv.parse ig.data.objemy, (row) ->
   for i in <[2012 2013 2014]>
     row[i] = parseInt row[i], 10
