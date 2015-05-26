@@ -14,7 +14,7 @@ externalData =
   "objemy": "#__dirname/data/objemy.tsv"
   "naklady": "#__dirname/data/data.tsv"
 
-preferScripts = <[utils.js postInit.js _loadData.js ../data.js init.js _loadExternal.js]>
+preferScripts = <[GraphTip.js utils.js postInit.js _loadData.js ../data.js init.js _loadExternal.js]>
 deferScripts = <[ geoUtils.js base.js ]>
 develOnlyScripts = <[ _loadData.js _loadExternal.js]>
 gzippable = <[ www/index.deploy.html www/script.deploy.js ]>

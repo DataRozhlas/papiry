@@ -2,6 +2,7 @@ return if window.location.hash != \#stack
 sum = -> it.reduce (curr, prev = 0) -> prev + curr
 container = d3.select ig.containers.base
   ..classed \stack yes
+graphTip = new ig.GraphTip container
 data = d3.tsv.parse ig.data.naklady, (row) ->
   for field, value of row
     row[field] = parseInt value, 10 if field != "Úřad"
@@ -42,6 +43,12 @@ orderButton = container.append \button
   ..attr \class \reorder
   ..on \click reorder
 list = container.append \ul
+displayTooltip = ->
+  offset = ig.utils.offset @
+  text = "#{it.category}: #{ig.utils.formatNumber it.count} Kč (#{ig.utils.formatNumber it.relative, 2} Kč za stranu)"
+  graphTip.display offset.left + 0.5 * @clientWidth, offset.top - 5, text
+hideTooltip = ->
+  graphTip.hide!
 listItems = list.selectAll \li .data data .enter!append \li
   ..append \span
     ..attr \class \title
@@ -51,6 +58,9 @@ listItems = list.selectAll \li .data data .enter!append \li
     ..selectAll \div.item .data (.displayed) .enter!append \div
       ..attr \class \item
       ..style \width -> "#{xScale it.relative}px"
+      ..on \mouseover displayTooltip
+      ..on \touchstart displayTooltip
+      ..on \mouseout hideTooltip
     ..append \div
       ..attr \class "count service"
       ..style \left -> "#{xScale it.sort1}px"
