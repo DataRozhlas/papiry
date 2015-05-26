@@ -5,17 +5,15 @@ container = d3.select ig.containers.base
 data = d3.tsv.parse ig.data.naklady, (row) ->
   for field, value of row
     row[field] = parseInt value, 10 if field != "Úřad"
+  row.count = row['Počet papírů']
   row['displayed'] = ['Tonery' 'Náklady na papír' 'Servis' 'Tiskárny' 'Software'].map (category) ->
     count = row[category] || 0
-    relative = (row[category] || 0) / row['Počet papírů']
+    relative = (row[category] || 0) / row.count
     {category, count, relative}
   row['sort1'] = sum (row.displayed.slice 0, 2 .map (.relative))
   row.sum = row['sort2'] = sum (row.displayed.map (.relative))
   row
 
-yScale = d3.scale.linear!
-  ..domain [0 d3.max data.map -> it['Počet papírů']]
-  ..range [0 100]
 
 lineHeight = 36px
 
@@ -23,6 +21,11 @@ lineHeight = 36px
 xScale = d3.scale.linear!
   ..domain [0 d3.max data.map (.sum)]
   ..range [0 550]
+
+paperScale = d3.scale.linear!
+  ..domain [0 12e6]
+  ..range [0 480]
+
 
 currentOrder = null
 reorder = (field) ->
@@ -56,6 +59,10 @@ listItems = list.selectAll \li .data data .enter!append \li
       ..attr \class "count all"
       ..style \left -> "#{xScale it.sort2}px"
       ..html -> "#{ig.utils.formatNumber it.sort2, 2} Kč"
-
+    ..append \svg
+      ..attr \width -> paperScale it.count
+      ..attr \height 4
+      ..append \line
+        ..attr \x2 -> paperScale it.count
 
 reorder 'sort1'
