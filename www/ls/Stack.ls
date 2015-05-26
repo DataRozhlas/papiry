@@ -6,8 +6,8 @@ data = d3.tsv.parse ig.data.naklady, (row) ->
   for field, value of row
     row[field] = parseInt value, 10 if field != "Úřad"
   row['displayed'] = ['Tonery' 'Náklady na papír' 'Servis' 'Tiskárny' 'Software'].map (category) ->
-    count = row[category]
-    relative = row[category] / row['Počet papírů']
+    count = row[category] || 0
+    relative = (row[category] || 0) / row['Počet papírů']
     {category, count, relative}
   row['sort1'] = sum (row.displayed.slice 0, 2 .map (.relative))
   row.sum = row['sort2'] = sum (row.displayed.map (.relative))
@@ -17,32 +17,45 @@ yScale = d3.scale.linear!
   ..domain [0 d3.max data.map -> it['Počet papírů']]
   ..range [0 100]
 
-data.sort (a, b) -> b.sort1 - a.sort1
 lineHeight = 36px
-data.forEach (it, i) ->
-  it.top = i * lineHeight
 
 
 xScale = d3.scale.linear!
   ..domain [0 d3.max data.map (.sum)]
-  ..range [0 600]
+  ..range [0 550]
 
-container.append \ul
-  ..selectAll \li .data data .enter!append \li
-    ..style \top -> "#{it.top}px"
-    ..append \span
-      ..attr \class \title
-      ..html -> it['Úřad']
+currentOrder = null
+reorder = (field) ->
+  field ?= if currentOrder == "sort1" then "sort2" else "sort1"
+  currentOrder := field
+  list.attr \class field
+  data
+    .sort (a, b) -> b[field] - a[field]
+    .forEach (it, i) -> it.top = i * lineHeight
+  listItems.style \top -> "#{it.top}px"
+  orderButton.html if field == "sort1" then "Seřadit podle celkových nákladů" else "Seřadit podle spotřebních nákladů"
+
+orderButton = container.append \button
+  ..attr \class \reorder
+  ..on \click reorder
+list = container.append \ul
+listItems = list.selectAll \li .data data .enter!append \li
+  ..append \span
+    ..attr \class \title
+    ..html -> it['Úřad']
+  ..append \div
+    ..attr \class \bar
+    ..selectAll \div.item .data (.displayed) .enter!append \div
+      ..attr \class \item
+      ..style \width -> "#{xScale it.relative}px"
     ..append \div
-      ..attr \class \bar
-      ..selectAll \div.item .data (.displayed) .enter!append \div
-        ..attr \class \item
-        ..style \width -> "#{xScale it.relative}px"
-      ..append \div
-        ..attr \class "count service"
-        ..style \left -> "#{xScale it.sort1}px"
-        ..html -> "#{ig.utils.formatNumber it.sort1, 2} Kč"
-      ..append \div
-        ..attr \class "count all"
-        ..style \left -> "#{xScale it.sort2}px"
-        ..html -> "#{ig.utils.formatNumber it.sort2, 2} Kč"
+      ..attr \class "count service"
+      ..style \left -> "#{xScale it.sort1}px"
+      ..html -> "#{ig.utils.formatNumber it.sort1, 2} Kč"
+    ..append \div
+      ..attr \class "count all"
+      ..style \left -> "#{xScale it.sort2}px"
+      ..html -> "#{ig.utils.formatNumber it.sort2, 2} Kč"
+
+
+reorder 'sort1'

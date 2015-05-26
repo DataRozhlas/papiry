@@ -4,11 +4,14 @@
     list-style-type none
     margin 0px
     padding 0px
+    width 100%
+    float left
     li
       width 100%
       float left
       position absolute
       height 36px
+      transition top 0.6s
       .title
         display block
         width 360px
@@ -22,19 +25,15 @@
         height 20px
         position relative
         top 8px
+
         .item
           float left
           height 100%
+          transition all 0.6s
           &:nth-child(1)
             background #ab0000
           &:nth-child(2)
             background #d5342d
-          &:nth-child(3)
-            background #003366
-          &:nth-child(4)
-            background #2268b0
-          &:nth-child(5)
-            background #42a1ff
           &:nth-child(3)
             background rgba(desaturate(#003366, 70%), 0.01)
             border 1px solid rgba(#003366, 0.1)
@@ -47,6 +46,10 @@
             background rgba(desaturate(#42a1ff, 70%), 0.01)
             border 1px solid rgba(#42a1ff, 0.1)
             border-left 0px
+          &:nth-child(2)
+          &:nth-child(5)
+            border-top-right-radius 2px
+            border-bottom-right-radius 2px
         .count
           position absolute
           white-space nowrap
@@ -55,3 +58,18 @@
           font-size 12px
           &.all
             opacity 0.1
+    &.sort2
+      li .bar .count
+        &.all
+          opacity 1
+        &.service
+          opacity 0.01
+      li .bar .item
+        &:nth-child(2)
+          border-radius 0px
+        &:nth-child(3)
+          background #003366
+        &:nth-child(4)
+          background #2268b0
+        &:nth-child(5)
+          background #42a1ff
