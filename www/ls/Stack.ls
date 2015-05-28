@@ -7,11 +7,11 @@ data = d3.tsv.parse ig.data.naklady, (row) ->
   for field, value of row
     row[field] = parseInt value, 10 if field != "Úřad"
   row.count = row['Počet papírů']
-  row['displayed'] = ['Tonery' 'Náklady na papír' 'Servis' 'Tiskárny' 'Software'].map (category) ->
+  row['displayed'] = ['Náklady na papír' 'Tonery' 'Servis' 'Tiskárny' 'Software'].map (category) ->
     count = row[category] || 0
     relative = (row[category] || 0) / row.count
     {category, count, relative}
-  row['sort1'] = sum (row.displayed.slice 0, 2 .map (.relative))
+  row['sort1'] = row.displayed[0].relative
   row.sum = row['sort2'] = sum (row.displayed.map (.relative))
   row
 
@@ -24,7 +24,7 @@ xScale = d3.scale.linear!
   ..range [0 550]
 
 paperScale = d3.scale.linear!
-  ..domain [0 12e6]
+  ..domain [0 36e6]
   ..range [0 480]
 
 
@@ -37,7 +37,7 @@ reorder = (field) ->
     .sort (a, b) -> b[field] - a[field]
     .forEach (it, i) -> it.top = i * lineHeight
   listItems.style \top -> "#{it.top}px"
-  orderButton.html if field == "sort1" then "Seřadit podle celkových nákladů" else "Seřadit podle spotřebních nákladů"
+  orderButton.html if field == "sort1" then "Zobrazit celkové náklady" else "Zobrazit pouze náklady na papír"
 
 orderButton = container.append \button
   ..attr \class \reorder
@@ -75,4 +75,4 @@ listItems = list.selectAll \li .data data .enter!append \li
       ..append \line
         ..attr \x2 -> paperScale it.count
 
-reorder 'sort1'
+reorder 'sort2'
