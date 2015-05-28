@@ -32,7 +32,7 @@ currentOrder = null
 reorder = (field) ->
   field ?= if currentOrder == "sort1" then "sort2" else "sort1"
   currentOrder := field
-  list.attr \class field
+  list.attr \class "barchart #field"
   data
     .sort (a, b) -> b[field] - a[field]
     .forEach (it, i) -> it.top = i * lineHeight
@@ -76,3 +76,9 @@ listItems = list.selectAll \li .data data .enter!append \li
         ..attr \x2 -> paperScale it.count
 
 reorder 'sort2'
+
+legendItems = ['Náklady na papír' 'Tonery' 'Servis' 'Tiskárny' 'Software' 'Objem tisku']
+container.append \ul
+  ..attr \class \legend
+  ..selectAll \li .data legendItems .enter!append \li
+    ..html -> it

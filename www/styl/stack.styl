@@ -1,5 +1,5 @@
 &
-  ul
+  ul.barchart
     position relative
     list-style-type none
     margin 0px
@@ -26,7 +26,6 @@
         height 20px
         position relative
         top 8px
-
         .item
           z-index 2
           position relative
@@ -103,4 +102,42 @@
       box-shadow 0px 0px 5px ColorBlue
     &:active
       background lighten(ColorBlue, 91%)
+
+  ul.legend
+    list-style none
+    margin 0px
+    padding 0px
+    position absolute
+    top 12px
+    left 360px
+    li
+      float left
+      padding-left 17px
+      padding-right 18px
+      position relative
+      &:before
+        content ""
+        position absolute
+        top 4px
+        left 0px
+        width 10px
+        height 10px
+        border-radius 2px
+      &:nth-child(1):before
+        background #ab0000
+      &:nth-child(2):before
+        background #003366
+      &:nth-child(3):before
+        background #0b5296
+      &:nth-child(4):before
+        background #1a72c9
+      &:nth-child(5):before
+        background #2994ff
+      &:nth-child(6):before
+        background #003366
+        height 4px
+        border-radius 0
+        top 7px
+        transform skew(-30deg)
+
 
