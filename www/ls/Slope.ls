@@ -10,7 +10,7 @@ data = d3.tsv.parse ig.data.objemy, (row) ->
 
 fullWidth = 610
 fullHeight = 600
-margin = top: 20 right: 390 bottom: 20 left: 40
+margin = top: 20 right: 390 bottom: 30 left: 40
 width = fullWidth - margin.left - margin.right
 height = fullHeight - margin.top - margin.bottom
 yScale = d3.scale.linear!
@@ -42,6 +42,13 @@ drawing.selectAll \g.urad.black .data data .enter!append \g
     ..attr \data-name -> it.urad
     ..attr \data-pago -> it.end / it.start
     ..attr \d -> path [it.start, it.end]
+drawing.selectAll \text.legend .data [2012 2014] .enter!append \text
+  ..attr \class \legend
+  ..html -> it
+  ..attr \y height + 25
+  ..attr \text-anchor \middle
+  ..attr \x (d, i) -> i * width
+
 uradG = drawing.selectAll \g.urad.color .data data .enter!append \g
   ..attr \class "urad color"
   ..append \path
