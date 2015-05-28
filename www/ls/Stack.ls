@@ -44,8 +44,11 @@ orderButton = container.append \button
   ..on \click reorder
 list = container.append \ul
 displayTooltip = ->
+  text = if it['Úřad']
+    "Spotřebováno papíru: #{ig.utils.formatNumber it['Počet papírů'] / 3} listů A4 za rok"
+  else
+    "#{it.category}: #{ig.utils.formatNumber it.count} Kč (#{ig.utils.formatNumber it.relative, 2} Kč za stranu)"
   offset = ig.utils.offset @
-  text = "#{it.category}: #{ig.utils.formatNumber it.count} Kč (#{ig.utils.formatNumber it.relative, 2} Kč za stranu)"
   graphTip.display offset.left + 0.5 * @clientWidth, offset.top - 5, text
 hideTooltip = ->
   graphTip.hide!
@@ -70,6 +73,9 @@ listItems = list.selectAll \li .data data .enter!append \li
       ..style \left -> "#{xScale it.sort2}px"
       ..html -> "#{ig.utils.formatNumber it.sort2, 2} Kč"
     ..append \svg
+      ..on \mouseover displayTooltip
+      ..on \touchstart displayTooltip
+      ..on \mouseout hideTooltip
       ..attr \width -> paperScale it.count
       ..attr \height 4
       ..append \line
